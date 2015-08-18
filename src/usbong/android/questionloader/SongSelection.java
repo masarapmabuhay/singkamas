@@ -6,35 +6,42 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 import usbong.android.utils.UsbongUtils;
-
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class SongSelection extends ListActivity {
 	String language;
 	Button review;
+	Resources myRes;
+	Drawable myDrawableImage;
 	
+	@SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,64 +49,102 @@ public class SongSelection extends ListActivity {
         Bundle bundle = getIntent().getExtras();
     	language= bundle.getString("language");
     	
+    	//added by Mike, 12 June 2015
+    	//http://stackoverflow.com/questions/1016896/get-screen-dimensions-in-pixels;
+    	//answer by Josef Pfleger
+    	Display display = getWindowManager().getDefaultDisplay();
+    	Point size = new Point();
+    	display.getSize(size);
+    	int width = size.x;
+    	int height = size.y;
+    	
+		//Reference: http://www.anddev.org/tinytut_-_get_resources_by_name__getidentifier_-t460.html; last accessed 14 Sept 2011
+        myRes = getResources();        
     	
         try
         {
         	String[] fileList = getResources().getAssets().list(language);
         	System.out.println("filelist"+Arrays.toString(fileList));
         	//System.out.println(Arrays.toString(fileList));
-        	
-        	MyListAdapter adapter = new MyListAdapter(fileList);        	
-        	setListAdapter(adapter);        	
-        	
-        	ListView list = getListView();        	
-        	list.setOnItemClickListener(new OnItemClickListener() {
+        	        	
+        	ListView list = getListView();
+            //added by Mike, 12 June 2015
+        	list.setCacheColorHint(0);
+//            list.setBackgroundResource(R.drawable.japanbanner);                    
+            ImageView v = new ImageView(this);
+            v.setMaxWidth(width);
+            v.setMinimumWidth(width);                        
+            v.setAdjustViewBounds(true);
+
+			if (language.equalsIgnoreCase("Japanese"))
+			{
+				v.setImageResource(R.drawable.japanbanner);
+			}
+			else if (language.equalsIgnoreCase("Mandarin"))
+			{
+				v.setImageResource(R.drawable.chinabanner);
+			}
+			else if (language.equalsIgnoreCase("Korean"))
+			{
+				v.setImageResource(R.drawable.koreabanner);
+        	}
+			
+            list.addHeaderView(v);
+        	list.setBackgroundColor(Color.parseColor("#FFFFFF")); //6f5c44 36342a
+        	list.setDividerHeight(10);
+        	list.setDivider(new ColorDrawable(0x00613318));
+            list.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long id) {
-					arg1.setBackgroundColor(Color.parseColor("#4e4b3c"));
-					
-					// TODO Auto-generated method stub
-					TextView textPlaceHolder = (TextView) arg1.findViewById(R.id.textViewPlaceHolder);
-					//System.out.println(text.getText());
-					if (language.equalsIgnoreCase("Japanese"))
+					if(position!=0)
 					{
-						Intent intent = new Intent(SongSelection.this, SettingSelection.class);
-						intent.putExtra("song_title", textPlaceHolder.getText());
-						intent.putExtra("language", language);
-						//System.out.println("LAnguage"+language);
-						startActivity(intent);
-						SongSelection.this.finish();
+						//arg1.setBackgroundColor(Color.parseColor("#4e4b3c"));
+						// TODO Auto-generated method stub
+						TextView textPlaceHolder = (TextView) arg1.findViewById(R.id.textViewPlaceHolder);
+						//System.out.println(text.getText());
+						if (language.equalsIgnoreCase("Japanese"))
+						{
+							Intent intent = new Intent(SongSelection.this, SettingSelection.class);
+							intent.putExtra("song_title", textPlaceHolder.getText());
+							intent.putExtra("language", language);
+							//System.out.println("LAnguage"+language);
+							startActivity(intent);
+							//SongSelection.this.finish();
+						}
+						else if (language.equalsIgnoreCase("Mandarin"))
+						{
+							Intent intent = new Intent(SongSelection.this, SettingSelection.class);
+							intent.putExtra("song_title", textPlaceHolder.getText());
+							intent.putExtra("language", language);
+							//System.out.println("LAnguage"+language);
+							startActivity(intent);
+							//SongSelection.this.finish();
+						}
+						else
+						{
+							Intent intent = new Intent(SongSelection.this, MainActivity.class);
+					    	intent.putExtra("difficulty", "easy");
+					    	intent.putExtra("song_title", textPlaceHolder.getText());
+					    	intent.putExtra("language", language);
+					    	startActivity(intent);
+					    	//SongSelection.this.finish();
+					    	
+						}
 					}
-					else if (language.equalsIgnoreCase("Mandarin"))
-					{
-						Intent intent = new Intent(SongSelection.this, SettingSelection.class);
-						intent.putExtra("song_title", textPlaceHolder.getText());
-						intent.putExtra("language", language);
-						//System.out.println("LAnguage"+language);
-						startActivity(intent);
-						SongSelection.this.finish();
-					}
-					else
-					{
-						Intent intent = new Intent(SongSelection.this, MainActivity.class);
-				    	intent.putExtra("difficulty", "easy");
-				    	intent.putExtra("song_title", textPlaceHolder.getText());
-				    	intent.putExtra("language", language);
-				    	startActivity(intent);
-				    	SongSelection.this.finish();
-				    	
-					}
-					
 				}
 			});
+
+            //edited by Mike, 13 June 2015
+        	MyListAdapter adapter = new MyListAdapter(fileList);
+        	setListAdapter(adapter);        	
     		
         }
         catch(Exception e)
         {
         	e.printStackTrace();
-        }
+        }        
     }
 
 	@Override
@@ -143,8 +188,6 @@ public class SongSelection extends ListActivity {
 
 		}
 	}
-    
-    
     private class MyListAdapter extends BaseAdapter
     {
     	private String[] fileList;
@@ -172,6 +215,7 @@ public class SongSelection extends ListActivity {
 			return arg0;
 		}
 
+		@SuppressLint("DefaultLocale")
 		@Override
 		public View getView(int position, View convertView, ViewGroup arg2) {
 			// TODO Auto-generated method stub
@@ -187,13 +231,16 @@ public class SongSelection extends ListActivity {
 			{
 				view = convertView;
 			}
-			
+/*//commented out by Mike, 10 June 2015			
 			ImageView image = (ImageView) view.findViewById(R.id.imageView1);
+*//*
+			ImageView banner_image = (ImageView) view.findViewById(R.id.banner_imageView);
+*/
+
 			TextView text = (TextView) view.findViewById(R.id.textView1);			
 			TextView textPlaceHolder = (TextView) view.findViewById(R.id.textViewPlaceHolder);			
+
 			
-			// set the image here
-			// image.setImageBitmap(bm)
 			//System.out.println(text);
 			// set the text
 //			text.setText(fileList[position]); //commented out by Mike, 30 March 2015
@@ -220,9 +267,5 @@ public class SongSelection extends ListActivity {
 			return view;
 		}
     	
-    }
-    
-    
-    
-    
+    }    
 }

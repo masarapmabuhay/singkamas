@@ -20,9 +20,15 @@ import java.io.InputStreamReader;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 
 public class UsbongUtils {		
-	public final static String APP_VERSION="1April2015 (Google Play)";	
+	public final static String APP_VERSION="June15,2015 (Google Play)";	
+	public final static String API_KEY = "AIzaSyB5mM_lk_bbdT5nUWQTO6S5FyZ9IgaxqXc";
+
+	public final static String myPackageName="usbong.android.questionloader";
 
 	public static int width;
 	public static int height;
@@ -56,5 +62,5 @@ public class UsbongUtils {
     		e.printStackTrace();
     	}    		
     	return null;
-    }
+    }    
 }

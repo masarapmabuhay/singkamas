@@ -1,17 +1,36 @@
---Singkamas (beta)--
-ver: April 18, 2015
-
-Singkamas: Language Learning through Songs
+Singkamas: Language Learning through Music
 
 Usbong Social Systems, Inc.
 --Core Developers--
 Michael B. Syson 
 Nadia C. Leetian
 Nikko A. Nolasco 
+Brent Carl W. Anonas
+
+--QA Engineer--
+Juaneo Fernando
+
+--Graphic Artists--
+Angela Escudero
+Juaneo Fernando
+Jaime D. Lopez
+Isabel Ann Pasco
+
+--Community Developers--
+Nikko A. Nolasco
+Jaime D. Lopez
+Brent Carl W. Anonas
+
+--Acknowledgment--
+Pop-Up by Lorensius Londa: http://www.londatiga.net/it/how-to-create-quickaction-dialog-in-android/
+
+Instrument Vectors from http://www.freepik.com/free-vector/musical-instruments_766763.htm#term=instruments&page=1&position=3
 
 Contact:
 Website: www.usbong.ph
 Mailing List: usbong-users@googlegroups.com
 Email: usbong.ph@gmail.com
 
-Copyright 2011-2015.
+Disclaimer: The songs/artists in this application are not directly affiliated with Singkamas. This application is only for educational purposes.
+
+Copyright 2015.
